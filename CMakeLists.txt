@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(my_stereo_vslam)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+# set(CMAKE_BUILD_TYPE Release)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
+add_compile_options(-std=c++11)
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE  "-std=c++11 -O3 -fopenmp -pthread")
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+add_subdirectory(${PROJECT_SOURCE_DIR}/include/3rdparties/g2o)
+add_subdirectory(${PROJECT_SOURCE_DIR}/include/3rdparties/Pangolin)
+
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   cv_bridge
@@ -22,9 +26,46 @@ find_package(catkin REQUIRED COMPONENTS
   tf
 )
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+# Eigen
+# include_directories("/usr/include/eigen3")
+find_package(Eigen3 REQUIRED)
 
+# OpenCV
+find_package(OpenCV REQUIRED)
+
+# pangolin
+find_package(Pangolin REQUIRED)
+
+# Sophus
+find_package(Sophus REQUIRED)
+
+# G2O
+find_package(G2O REQUIRED)
+
+# glog
+find_package(Glog REQUIRED)
+
+# gtest
+find_package(GTest REQUIRED)
+
+# gflags
+find_package(GFlags REQUIRED)
+
+
+# csparse
+find_package(CSparse REQUIRED)
+
+set(THIRD_PARTY_LIBS
+        ${OpenCV_LIBS}
+        ${Sophus_LIBRARIES}
+        ${Pangolin_LIBRARIES} GL GLU GLEW glut
+        g2o_core g2o_stuff g2o_types_sba g2o_solver_csparse g2o_csparse_extension
+        ${GTEST_BOTH_LIBRARIES}
+        ${GLOG_LIBRARIES}
+        ${GFLAGS_LIBRARIES}
+        pthread
+        ${CSPARSE_LIBRARY}
+        )
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -127,6 +168,14 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Pangolin_INCLUDE_DIRS}
+  ${Sophus_INCLUDE_DIRS}
+  ${G2O_INCLUDE_DIRS}
+  ${GLOG_INCLUDE_DIRS}
+  ${GTEST_INCLUDE_DIRS}
+  ${GFLAGS_INCLUDE_DIRS}
+  ${CSPARSE_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
