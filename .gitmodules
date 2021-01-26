@@ -1,0 +1,6 @@
+[submodule "include/3rdparties/Pangolin"]
+	path = include/3rdparties/Pangolin
+	url = git@github.com:stevenlovegrove/Pangolin.git
+[submodule "include/3rdparties/g2o"]
+	path = include/3rdparties/g2o
+	url = git@github.com:RainerKuemmerle/g2o.git
